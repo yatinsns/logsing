@@ -9,6 +9,7 @@ var HOSTNAME = 'localhost';
 
 var app = express();
 app.use(morgan('dev'));
+app.set('view engine', 'ejs');
 
 var multipartMiddleware = multipart();
 
@@ -22,7 +23,26 @@ app.get('/', function (request, response) {
 
 app.post('/upload', multipartMiddleware, function (request, response) {
   console.log(request.body, request.files);
-  response.end("done");
+
+  fs.readFile(request.files.logs.path, function (err, data) {
+    var newPath = __dirname + "/../uploads/uploadedFileName";
+    fs.writeFile(newPath, data, function (err) {
+      if (err) {
+	response.end(err);
+      } else {
+	fs.readFile(newPath, 'utf8', function(err, data) {
+          if (err) {
+	    response.end(err);
+	  } else {
+	    var datas = data.split('\n');
+	    response.render('logs',{
+	      logs: datas
+	    });
+	  }
+        });
+      }
+    });
+  });
 });
 
 
