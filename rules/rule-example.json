@@ -1,0 +1,30 @@
+{
+  "rules": [{
+    "name": "App state",
+    "states": [{
+      "name": "Unknown",
+      "bgColor": "lightgrey",
+      "paths": [{
+	"to": "active",
+	"pattern": "Did Become Active"
+      }, {
+	"to": "background",
+	"pattern": "Did Enter Background"
+      }]
+    }, {
+      "name": "active",
+      "bgColor": "lightgreen",
+      "paths": [{
+	"to": "background",
+	"pattern": "Did Enter Background"
+      }]
+    }, {
+      "name": "background",
+      "bgColor": "yellow",
+      "paths": [{
+	"to": "active",
+	"pattern": "Did Become Active"
+      }]
+    }]
+  }]
+}
