@@ -1,0 +1,16 @@
+{
+  "name": "logsing",
+  "version": "0.0.1",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Yatin Sarbalia",
+  "license": "ISC",
+  "dependencies": {
+    "connect-multiparty": "^2.0.0",
+    "express": "^4.13.4",
+    "morgan": "^1.7.0"
+  }
+}
