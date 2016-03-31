@@ -3,6 +3,7 @@ var morgan = require('morgan');
 var fs = require('fs');
 var path = require('path');
 var multipart = require('connect-multiparty');
+var logParser = require('./log-parser');
 
 var PORT = 8000;
 var HOSTNAME = 'localhost';
@@ -30,16 +31,24 @@ app.post('/upload', multipartMiddleware, function (request, response) {
       if (err) {
 	response.end(err);
       } else {
-	fs.readFile(newPath, 'utf8', function(err, data) {
-          if (err) {
-	    response.end(err);
-	  } else {
-	    var datas = data.split('\n');
-	    response.render('logs',{
-	      logs: datas
-	    });
-	  }
-        });
+	fs.readFile(request.files.rules.path, function (err, data) {
+	  var newRulesPath = __dirname + "/../uploads/rules";
+	  fs.writeFile(newRulesPath, data, function (err) {
+	    if (err) {
+              response.end();
+	    } else {
+	      logParser(newPath, newRulesPath, function (err, data) {
+		if (err) {
+                  response.end(err);
+		} else {
+		  response.render('logs', {
+                    logs: data
+		  });
+		}
+	      });
+	    }
+	  });
+	});
       }
     });
   });

@@ -5,7 +5,7 @@
   <i> Let your logs sing for you </i><br/><br/>
   <% if (logs.length) { %>
     <% logs.forEach(function(log){ %>
-      <div style="background-color:lightgrey;"><%= log %></div><br/>
+      <div style='background-color:<%= log.bgColor %>;'><%= log.data %></div><br/>
     <% }) %>
   <% } %>
   </body>
