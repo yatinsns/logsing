@@ -1,9 +1,10 @@
 {
+  "logPattern": "20",
   "rules": [{
     "name": "App state",
     "states": [{
       "name": "Unknown",
-      "bgColor": "lightgrey",
+      "bgColor": "white",
       "paths": [{
 	"to": "active",
 	"pattern": "Did Become Active"
@@ -20,7 +21,7 @@
       }]
     }, {
       "name": "background",
-      "bgColor": "yellow",
+      "bgColor": "lightgrey",
       "paths": [{
 	"to": "active",
 	"pattern": "Did Become Active"
