@@ -13,12 +13,30 @@ var logParser = function (logsPath, rulesPath, completionBlock) {
     return null;
   }
 
+  function splitDataAsPerLogPattern(data, logPattern) {
+    var lastLine = "";
+    var lines = data.split('\n');
+    var result = [];
+    console.log("LogPattern : " + logPattern)
+    for (var index in lines) {
+      var line = lines[index];
+      if (line.substr(0,logPattern.length) === logPattern) {
+        result.push(lastLine);
+	lastLine = line;
+      } else {
+        lastLine = lastLine + line;
+      }
+    }
+    result.push(lastLine);
+    return result;
+  }
+
   function parse(logsData, rulesData, completionBlock) {
     var jsonData = JSON.parse(rulesData);
     var states = jsonData.rules[0].states;
     var currentState = getStateWithName("Unknown", states); 
 
-    var datas = logsData.split('\n');
+    var datas = splitDataAsPerLogPattern(logsData, jsonData.logPattern);
     var result = [];
     for (var index in datas) {
       var data = datas[index];
