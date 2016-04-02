@@ -42,8 +42,15 @@ var logParser = function (logsPath, rulesPath, completionBlock) {
       var data = datas[index];
       for (var pathIndex in currentState.paths) {
         var path = currentState.paths[pathIndex];
-	if (data.indexOf(path.pattern) > -1) {
-	  currentState = getStateWithName(path.to, states);
+	var found = false;
+	for (var patternIndex in path.pattern) {
+	  if (data.indexOf(path.pattern[patternIndex]) > -1) {
+	    currentState = getStateWithName(path.to, states);
+	    found = true;
+            break;
+	  }
+	}
+	if (found) {
           break;
 	}
       }
