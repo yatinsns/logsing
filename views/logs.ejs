@@ -12,28 +12,37 @@
 <h1>LOGSING</h1><hr/>
 <i> Let your logs sing for you </i><br/><br/>
 
-<% function showContainer(logs, currentIndex, maxIndex) { %>
-  <div class="container">
-    <div class="panel-group" id="accordian<%= currentIndex %>">
+<% function showContainer(logs, currentIndex, maxIndex, id) { %>
+    <% var accordionId = id + currentIndex; %>
+    <div class="panel-group" id="accordion<%= accordionId %>">
 
     <% if (logs.length) { %>
       <% var lastSection = ""; %>
       <% var sectionIndex = 1; %>
 
         <div><div><div>
+        <% var childLogs = []; %>
 	<% logs.forEach(function(log){ %>
 	    <% if (log.states[currentIndex].name === lastSection) { %>
-	      <div><%= log.data %></div><br/>
+	      <% if (currentIndex == maxIndex) { %>
+	        <div><%= log.data %></div><br/>
+	      <% } else { %>
+                <% childLogs.push(log); %>
+	      <% } %>
 	    <% } else { %>
+	    <% if (currentIndex < maxIndex) { %>
+	      <% showContainer(childLogs, currentIndex + 1, maxIndex, accordionId + sectionIndex); %>
+	      <% childLogs = []; %>
+	    <% } %>
 	    </div></div></div>
 
 	    <div class="panel panel-default">
 	    <div class="panel-heading" style="background-color:<%= log.states[currentIndex].bgColor %>;">
 	    <h4 class="panel-title">
-	    <a data-toggle="collapse" data-parent="#accordion<%= currentIndex %>" href="#collapse<%= currentIndex %><%= sectionIndex %>"><%= log.states[currentIndex].name %></a>
+	    <a data-toggle="collapse" data-parent="#accordion<%= accordionId %>" href="#collapse<%= accordionId %><%= sectionIndex %>"><%= log.states[currentIndex].name %></a>
 	    </h4>
 	    </div>
-	    <div id="collapse<%= currentIndex %><%= sectionIndex %>" class="panel-collapse collapse">
+	    <div id="collapse<%= accordionId %><%= sectionIndex %>" class="panel-collapse collapse">
 	    <div class="panel-body" style="background-color:#efefef;">
 	    <div><%= log.data %></div><br/>
 	    <% lastSection = log.states[currentIndex].name; %>
@@ -42,12 +51,12 @@
 	    <% }); %>
 	</div></div></div>
 	<% } %>
-
     </div>
-  </div>
 <% } %>
 
-<% showContainer(logs, 0, logs[0].states.length); %>
+<div class="container">
+<% showContainer(logs, 0, logs[0].states.length - 1, ""); %>
+</div>
 
 <script type="text/javascript">
   $("#accordion").on("shown.bs.collapse", function () {
