@@ -11,45 +11,51 @@
 <body>
 <h1>LOGSING</h1><hr/>
 <i> Let your logs sing for you </i><br/><br/>
-<div class="container">
-  <div class="panel-group" id="accordion">
+
+<% function showContainer(logs, currentIndex, maxIndex) { %>
+  <div class="container">
+    <div class="panel-group" id="accordian<%= currentIndex %>">
+
     <% if (logs.length) { %>
       <% var lastSection = ""; %>
       <% var sectionIndex = 1; %>
+
         <div><div><div>
 	<% logs.forEach(function(log){ %>
-	    <% if (log.states[0].name === lastSection) { %>
-	    <div><%= log.data %></div><br/>
+	    <% if (log.states[currentIndex].name === lastSection) { %>
+	      <div><%= log.data %></div><br/>
 	    <% } else { %>
-	    </div>
-	    </div>
-	    </div>
+	    </div></div></div>
+
 	    <div class="panel panel-default">
-	    <div class="panel-heading" style="background-color:<%= log.states[0].bgColor %>;">
+	    <div class="panel-heading" style="background-color:<%= log.states[currentIndex].bgColor %>;">
 	    <h4 class="panel-title">
-	    <a data-toggle="collapse" data-parent="#accordion" href="#collapse<%= sectionIndex %>"><%= log.states[0].name %></a>
+	    <a data-toggle="collapse" data-parent="#accordion<%= currentIndex %>" href="#collapse<%= currentIndex %><%= sectionIndex %>"><%= log.states[currentIndex].name %></a>
 	    </h4>
 	    </div>
-	    <div id="collapse<%= sectionIndex %>" class="panel-collapse collapse">
+	    <div id="collapse<%= currentIndex %><%= sectionIndex %>" class="panel-collapse collapse">
 	    <div class="panel-body" style="background-color:#efefef;">
 	    <div><%= log.data %></div><br/>
-	    <% lastSection = log.states[0].name; %>
+	    <% lastSection = log.states[currentIndex].name; %>
 	    <% sectionIndex = sectionIndex + 1; %>
 	    <% } %>
 	    <% }); %>
 	</div></div></div>
 	<% } %>
-  </div>
-</div>
-<script type="text/javascript">
-$("#accordion").on("shown.bs.collapse", function () {
-    var myEl = $(this).find('.collapse.in').prev('.panel-heading');
 
-    $('html, body').animate({
-scrollTop: $(myEl).offset().top - 20
-}, 500);
-    });
+    </div>
+  </div>
+<% } %>
+
+<% showContainer(logs, 0, logs[0].states.length); %>
+
+<script type="text/javascript">
+  $("#accordion").on("shown.bs.collapse", function () {
+    var myEl = $(this).find('.collapse.in').prev('.panel-heading');
+    $('html, body').animate({ scrollTop: $(myEl).offset().top - 20 }, 500);
+  });
 </script>
+
 </body>
 </html>
 
