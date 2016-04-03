@@ -1,5 +1,6 @@
 var fs = require('fs');
 
+
 var logParser = function (logsPath, rulesPath, completionBlock) {
   console.log("logs at : " + logsPath);
   console.log("rules at : " + rulesPath);
@@ -11,6 +12,15 @@ var logParser = function (logsPath, rulesPath, completionBlock) {
       }
     }
     return null;
+  }
+
+  function getUnknownStatesForRules(rules) {
+    var unknownStates = [];
+    for (var ruleIndex in rules) {
+      var rule = rules[ruleIndex];
+      unknownStates.push(getStateWithName("Unknown", rule.states));
+    }
+    return unknownStates;
   }
 
   function splitDataAsPerLogPattern(data, logPattern) {
@@ -33,32 +43,39 @@ var logParser = function (logsPath, rulesPath, completionBlock) {
 
   function parse(logsData, rulesData, completionBlock) {
     var jsonData = JSON.parse(rulesData);
-    var states = jsonData.rules[0].states;
-    var currentState = getStateWithName("Unknown", states); 
+    var currentStates = getUnknownStatesForRules(jsonData.rules);
 
     var datas = splitDataAsPerLogPattern(logsData, jsonData.logPattern);
     var result = [];
+    var found = false;
     for (var index in datas) {
       var data = datas[index];
-      for (var pathIndex in currentState.paths) {
-        var path = currentState.paths[pathIndex];
-	var found = false;
-	for (var patternIndex in path.pattern) {
-	  if (data.indexOf(path.pattern[patternIndex]) > -1) {
-	    currentState = getStateWithName(path.to, states);
-	    found = true;
-            break;
+      var result_data = {
+        "data": data,
+	"states": []
+      };
+      for (var currentStateIndex in currentStates) {
+	var currentState = currentStates[currentStateIndex];
+	for (var pathIndex in currentState.paths) {
+	  var path = currentState.paths[pathIndex];
+	  found = false;
+	  for (var patternIndex in path.pattern) {
+	    if (data.indexOf(path.pattern[patternIndex]) > -1) {
+	      currentState = getStateWithName(path.to, jsonData.rules[currentStateIndex].states);
+	      found = true;
+	      break;
+	    }
+	  }
+	  if (found) {
+	    break;
 	  }
 	}
-	if (found) {
-          break;
-	}
+	currentStates[currentStateIndex] = currentState;
+	result_data.states.push({
+	  "name": currentState.name,
+	  "bgColor": currentState.bgColor
+	});
       }
-      var result_data = {
-        "data" : data,
-	"state" : currentState.name,
-	"bgColor": currentState.bgColor
-      };
       result.push(result_data);
     }
     completionBlock(null, result);  
