@@ -18,22 +18,22 @@
       <% var sectionIndex = 1; %>
         <div><div><div>
 	<% logs.forEach(function(log){ %>
-	    <% if (log.state === lastSection) { %>
+	    <% if (log.states[0].name === lastSection) { %>
 	    <div><%= log.data %></div><br/>
 	    <% } else { %>
 	    </div>
 	    </div>
 	    </div>
 	    <div class="panel panel-default">
-	    <div class="panel-heading" style="background-color:<%= log.bgColor %>;">
+	    <div class="panel-heading" style="background-color:<%= log.states[0].bgColor %>;">
 	    <h4 class="panel-title">
-	    <a data-toggle="collapse" data-parent="#accordion" href="#collapse<%= sectionIndex %>"><%= log.state %></a>
+	    <a data-toggle="collapse" data-parent="#accordion" href="#collapse<%= sectionIndex %>"><%= log.states[0].name %></a>
 	    </h4>
 	    </div>
 	    <div id="collapse<%= sectionIndex %>" class="panel-collapse collapse">
 	    <div class="panel-body" style="background-color:#efefef;">
 	    <div><%= log.data %></div><br/>
-	    <% lastSection = log.state; %>
+	    <% lastSection = log.states[0].name; %>
 	    <% sectionIndex = sectionIndex + 1; %>
 	    <% } %>
 	    <% }); %>
