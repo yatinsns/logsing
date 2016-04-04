@@ -49,6 +49,11 @@
 	    <% sectionIndex = sectionIndex + 1; %>
 	    <% } %>
 	    <% }); %>
+
+	    <% if (currentIndex < maxIndex) { %>
+	      <% showContainer(childLogs, currentIndex + 1, maxIndex, accordionId + sectionIndex); %>
+	      <% childLogs = []; %>
+	    <% } %>
 	</div></div></div>
 	<% } %>
     </div>
