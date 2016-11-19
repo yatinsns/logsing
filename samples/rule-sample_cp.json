@@ -1,33 +1,6 @@
 {
   "logPattern": "20",
   "rules": [{
-    "name": "App state",
-    "states": [{
-      "name": "Unknown",
-      "bgColor": "white",
-      "paths": [{
-	"to": "active",
-	"pattern": ["Did Become Active"]
-      }, {
-	"to": "background",
-	"pattern": ["Did Enter Background"]
-      }]
-    }, {
-      "name": "active",
-      "bgColor": "#fff2bf",
-      "paths": [{
-	"to": "background",
-	"pattern": ["Did Enter Background"]
-      }]
-    }, {
-      "name": "background",
-      "bgColor": "#d2d2d2",
-      "paths": [{
-	"to": "active",
-	"pattern": ["Did Become Active"]
-      }]
-    }]
-  },{
     "name": "Connection state",
     "states": [{
       "name": "Unknown",
@@ -65,6 +38,33 @@
       "paths": [{
 	"to": "connecting",
 	"pattern": ["Sending connect to Socket", "reallyConnect"]
+      }]
+    }]
+  }, {
+    "name": "App state",
+    "states": [{
+      "name": "Unknown",
+      "bgColor": "white",
+      "paths": [{
+	"to": "active",
+	"pattern": ["Did Become Active"]
+      }, {
+	"to": "background",
+	"pattern": ["Did Enter Background"]
+      }]
+    }, {
+      "name": "active",
+      "bgColor": "#fff2bf",
+      "paths": [{
+	"to": "background",
+	"pattern": ["Did Enter Background"]
+      }]
+    }, {
+      "name": "background",
+      "bgColor": "#d2d2d2",
+      "paths": [{
+	"to": "active",
+	"pattern": ["Did Become Active"]
       }]
     }]
   }]
